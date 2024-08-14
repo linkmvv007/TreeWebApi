@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BusinessLayer;
 
+/// <summary>
+/// EF Db context journal records
+/// </summary>
 public class LogContext : DbContext
 {
     public DbSet<ExceptionLog> ExceptionLogs { get; set; }
@@ -13,8 +16,8 @@ public class LogContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ExceptionLog>()
-.Property(e => e.CreatedAt)
-.HasDefaultValueSql("CURRENT_TIMESTAMP");
+            .Property(e => e.CreatedAt)
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
         modelBuilder.Entity<ExceptionLog>().
                ToTable("Exceptions", "dbo");

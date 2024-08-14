@@ -34,22 +34,22 @@ public class GetRangeQueryHandler : IRequestHandler<GetRangeQuery, JournalsJson?
             query = query.Where(e => e.StackTrace != null && e.StackTrace.Contains(searchStr));
         }
 
-        DateTime? fromDate = request.context.filter?.from > DateTime.MinValue
-            ? request.context.filter.from
-            : null;
-
-        if (fromDate is not null)
+        if (request.context.filter is not null)
         {
-            query = query.Where(e => e.CreatedAt >= fromDate);
-        }
+            var dates = request.context.filter.GetValidFromToDate();
 
-        DateTime? toDate = request.context.filter?.to > DateTime.MinValue
-            ? request.context.filter.to
-            : null;
+            DateTime? fromDate = dates.from;
+            if (fromDate is not null)
+            {
+                query = query.Where(e => e.CreatedAt >= fromDate);
+            }
 
-        if (toDate is not null)
-        {
-            query = query.Where(e => e.CreatedAt <= toDate);
+
+            DateTime? toDate = dates.to;
+            if (toDate is not null)
+            {
+                query = query.Where(e => e.CreatedAt <= toDate);
+            }
         }
 
         query = query.OrderByDescending(x => x.CreatedAt);

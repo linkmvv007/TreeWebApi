@@ -2,6 +2,9 @@
 
 namespace BusinessLayer.RequestContext;
 
+/// <summary>
+/// Rename node metod API parameters
+/// </summary>
 public record RenameNodeContext
 {
     [Required]

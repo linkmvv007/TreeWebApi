@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BusinessLayer;
 
+/// <summary>
+/// EF Db context tree nodes
+/// </summary>
 public class TreeContext : DbContext
 {
     public DbSet<TreeNode> TreeNodes { get; set; }
-    //public DbSet<ExceptionLog> ExceptionLogs { get; set; }
 
     public TreeContext(DbContextOptions<TreeContext> options)
         : base(options) { }

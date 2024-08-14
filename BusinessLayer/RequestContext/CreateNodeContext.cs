@@ -2,6 +2,9 @@
 
 namespace BusinessLayer.RequestContext;
 
+/// <summary>
+///  Create node metod API parameters
+/// </summary>
 public record CreateNodeContext
 {
     [Required]

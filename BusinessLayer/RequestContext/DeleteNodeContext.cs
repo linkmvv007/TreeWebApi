@@ -2,6 +2,9 @@
 
 namespace BusinessLayer.RequestContext;
 
+/// <summary>
+/// Remove node metod API parameters
+/// </summary>
 public record DeleteNodeContext
 {
     [Required]
