@@ -25,15 +25,17 @@ public class GetAllNodesQueryHandler : IRequestHandler<GetAllNodesQuery, NodesJs
     public async Task<NodesJson> Handle(GetAllNodesQuery request, CancellationToken cancellationToken)
     {
         int rootNodeId;
+
+        var treeName = request.TreeName.ToLower();
         var tree = await _dbContext.TreeNodes
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.ParentNode == null && x.Name == request.TreeName.ToLower());
+            .FirstOrDefaultAsync(x => x.Name == treeName && x.ParentNode == null);
 
         if (tree is null)
         {
             var rootNode = new TreeNode
             {
-                Name = request.TreeName.ToLower(),
+                Name = treeName,
                 Code = Guid.NewGuid()
             };
             _dbContext.TreeNodes.Add(rootNode);
@@ -57,17 +59,15 @@ public class GetAllNodesQueryHandler : IRequestHandler<GetAllNodesQuery, NodesJs
 
             return new NodesJson(rootNodeId, rootNode.Name);
         }
-        else
-        {
-            rootNodeId = tree.Id;
 
-            var nodeWithChildren = await GetTreeAsync(rootNodeId);
 
-            var children = nodeWithChildren.Select(x => new NodeInfo(x.Id, x.ParentNodeId, x.Name)).ToList();
+        rootNodeId = tree.Id;
 
-            return new NodesJson(tree.Id, tree.Name, children);
-        }
+        var nodeWithChildren = await GetTreeAsync(rootNodeId);
 
+        var children = nodeWithChildren.Select(x => new NodeInfo(x.Id, x.ParentNodeId, x.Name)).ToList();
+
+        return new NodesJson(tree.Id, tree.Name, children);
     }
 
     private async Task<List<TreeNode>> GetTreeAsync(int rootId)

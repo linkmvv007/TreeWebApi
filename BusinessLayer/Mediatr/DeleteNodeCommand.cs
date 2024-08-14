@@ -1,5 +1,5 @@
-﻿using BusinessLayer.RequestContext;
-using BusinessLayer.Exceptions;
+﻿using BusinessLayer.Exceptions;
+using BusinessLayer.RequestContext;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,27 +11,23 @@ public record DeleteNodeCommand(DeleteNodeContext context) : IRequest<Unit>;
 /// <summary>
 /// Handler for <see cref="DeleteNodeCommand"/>
 /// </summary>
-public class DeleteNodeCommandHandler : IRequestHandler<DeleteNodeCommand, Unit>
+public class DeleteNodeCommandHandler : BaseTreeNodeHandler, IRequestHandler<DeleteNodeCommand, Unit>
 {
-    private readonly TreeContext _dbContext;
 
     public DeleteNodeCommandHandler(TreeContext dbContext)
+        : base(dbContext)
     {
-        _dbContext = dbContext;
+
     }
 
     public async Task<Unit> Handle(DeleteNodeCommand request, CancellationToken cancellationToken)
     {
-        var tree = await _dbContext.TreeNodes.FirstOrDefaultAsync(x => x.Name == request.context.treeName.ToLower() && x.ParentNode == null);
-        if (tree is null)
-        {
-            throw new NotFoundException(NotFoundException.NotFoundError(request.context.treeName));
-        }
+        var rootNode = await GetRootTreeNode(request.context.treeName);
 
         try
         {
             await _dbContext.TreeNodes.
-                Where(x => x.Id == request.context.nodeId && x.Code == tree.Code).ExecuteDeleteAsync();
+                Where(x => x.Id == request.context.nodeId && x.Code == rootNode.Code).ExecuteDeleteAsync();
 
         }
         catch (System.Data.Common.DbException ex)

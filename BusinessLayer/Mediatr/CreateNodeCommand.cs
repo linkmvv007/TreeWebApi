@@ -1,5 +1,5 @@
-﻿using BusinessLayer.RequestContext;
-using BusinessLayer.Exceptions;
+﻿using BusinessLayer.Exceptions;
+using BusinessLayer.RequestContext;
 using DataLayer.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -14,26 +14,20 @@ public record CreateNodeCommand(CreateNodeContext Data) : IRequest<Unit>
 /// <summary>
 /// Handler for <see cref="CreateNodeCommand"/>
 /// </summary>
-public class CreateNodeCommandHandler : IRequestHandler<CreateNodeCommand, Unit>
+public class CreateNodeCommandHandler : BaseTreeNodeHandler, IRequestHandler<CreateNodeCommand, Unit>
 {
-    private readonly TreeContext _dbContext;
-
     public CreateNodeCommandHandler(TreeContext dbContext)
+        : base(dbContext)
     {
-        _dbContext = dbContext;
     }
 
     public async Task<Unit> Handle(CreateNodeCommand request, CancellationToken cancellationToken)
     {
         try
         {
-            var treeNode = _dbContext.TreeNodes.FirstOrDefault(x => x.Name == request.Data.treeName.ToLower());
-            if (treeNode is null)
-            {
-                throw new NotFoundException(NotFoundException.NotFoundError(request.Data.treeName));
-            }
+            var rootNode = await GetRootTreeNode(request.Data.treeName);
 
-            var parentNode = _dbContext.TreeNodes.FirstOrDefault(x => x.Id == request.Data.parentNodeId && x.Code == treeNode.Code);
+            var parentNode = _dbContext.TreeNodes.FirstOrDefault(x => x.Id == request.Data.parentNodeId && x.Code == rootNode.Code);
             if (parentNode is null)
             {
                 throw new NotFoundException(NotFoundException.NotFoundError(request.Data.parentNodeId));
@@ -44,7 +38,7 @@ public class CreateNodeCommandHandler : IRequestHandler<CreateNodeCommand, Unit>
             {
                 Name = request.Data.nodeName.ToLower(),
                 ParentNode = parentNode,
-                Code = treeNode.Code,
+                Code = rootNode.Code,
             });
 
             await _dbContext.SaveChangesAsync();

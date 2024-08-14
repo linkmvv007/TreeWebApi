@@ -7,28 +7,22 @@ namespace BusinessLayer.Mediatr;
 
 public record RenameNodeCommand(RenameNodeContext context) : IRequest<Unit>;
 
+
 /// <summary>
 /// Handler for <see cref="RenameNodeCommand"/>
 /// </summary>
-public class RenameNodeCommandHandler : IRequestHandler<RenameNodeCommand, Unit>
+public class RenameNodeCommandHandler : BaseTreeNodeHandler, IRequestHandler<RenameNodeCommand, Unit>
 {
-    private readonly TreeContext _dbContext;
-
     public RenameNodeCommandHandler(TreeContext dbContext)
+        : base(dbContext)
     {
-        _dbContext = dbContext;
     }
 
     public async Task<Unit> Handle(RenameNodeCommand request, CancellationToken cancellationToken)
     {
+        var rootNode = await GetRootTreeNode(request.context.treeName);
 
-        var tree = await _dbContext.TreeNodes.FirstOrDefaultAsync(x => x.Name == request.context.treeName.ToLower() && x.ParentNode == null);
-        if (tree is null)
-        {
-            throw new NotFoundException(NotFoundException.NotFoundError(request.context.treeName));
-        }
-
-        var node = await _dbContext.TreeNodes.FirstOrDefaultAsync(x => x.Id == request.context.nodeId && x.Code == tree.Code);
+        var node = await _dbContext.TreeNodes.FirstOrDefaultAsync(x => x.Id == request.context.nodeId && x.Code == rootNode.Code);
 
         if (node is null)
         {
