@@ -39,6 +39,7 @@ public static class ServiceCollectionExtension
             .AddFluentValidationAutoValidation()
             .AddValidatorsFromAssemblyContaining<CreateNodeContextValidator>(lifetime: ServiceLifetime.Transient)
             .AddValidatorsFromAssemblyContaining<RenameNodeContextValidator>(lifetime: ServiceLifetime.Transient)
-            .AddValidatorsFromAssemblyContaining<DeleteNodeContextValidator>(lifetime: ServiceLifetime.Transient);
+            .AddValidatorsFromAssemblyContaining<DeleteNodeContextValidator>(lifetime: ServiceLifetime.Transient)
+            .AddValidatorsFromAssemblyContaining<PaginationContextValidator>(lifetime: ServiceLifetime.Transient);
     }
 }

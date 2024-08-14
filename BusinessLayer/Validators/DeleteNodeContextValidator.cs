@@ -1,4 +1,4 @@
-﻿using BusinessLayer.Commands;
+﻿using BusinessLayer.RequestContext;
 using FluentValidation;
 
 namespace BusinessLayer.Validators;
@@ -13,6 +13,6 @@ public class DeleteNodeContextValidator : AbstractValidator<DeleteNodeContext>
         RuleFor(x => x.treeName)
            .NotEmpty()
            .Length(1, 64)
-           .WithMessage("максимальная длина имени дерева 64 символа");
+           .WithMessage(MsgValidation.ErrorMaxLength64);
     }
 }

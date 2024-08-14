@@ -1,4 +1,4 @@
-﻿using BusinessLayer.Commands;
+﻿using BusinessLayer.RequestContext;
 using FluentValidation;
 
 namespace BusinessLayer.Validators;
@@ -13,12 +13,12 @@ public class RenameNodeContextValidator : AbstractValidator<RenameNodeContext>
         RuleFor(x => x.treeName)
            .NotEmpty()
            .Length(1, 64)
-           .WithMessage("максимальная длина имени дерева 64 символа");
+           .WithMessage(MsgValidation.ErrorMaxLength64);
 
         RuleFor(x => x.newNodeName)
            .NotEmpty()
            .Length(1, 64)
-           .WithMessage("максимальная длина имени узла дерева 64 символа");
+           .WithMessage(MsgValidation.ErrorMaxLength64);
         //.When(x =>
         //{
         //    var debugNode = x;

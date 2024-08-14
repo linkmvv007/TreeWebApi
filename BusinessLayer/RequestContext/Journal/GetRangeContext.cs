@@ -1,17 +1,21 @@
-﻿namespace BusinessLayer.Commands.Journal;
+﻿using System.ComponentModel.DataAnnotations;
 
-//public record GetRangeContext
-//{
-//    public int skip { get; init; }
-//    public int take { get; init; }
-//    public Filter filter { get; init; }
-//}
+namespace BusinessLayer.RequestContext.Journal;
+
 public record GetRangeContext
 (
      int skip,
      int take,
-     Filter? filter);
+     Filter? filter
+);
 
+public record Pagination
+{
+    [Required]
+    public int skip { get; init; }
+    [Required]
+    public int take { get; init; }
+}
 public record Filter
 {
     public DateTime? from { get; init; }//: "2024-08-11T10:08:57.7379013Z",

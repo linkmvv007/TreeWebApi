@@ -1,11 +1,10 @@
-﻿using BusinessLayer.Commands;
+﻿using BusinessLayer.RequestContext;
 using FluentValidation;
 
 namespace BusinessLayer.Validators;
 
 public class CreateNodeContextValidator : AbstractValidator<CreateNodeContext>
 {
-
     public CreateNodeContextValidator()
     {
         RuleFor(x => x.parentNodeId)
@@ -14,11 +13,11 @@ public class CreateNodeContextValidator : AbstractValidator<CreateNodeContext>
         RuleFor(x => x.treeName)
             .NotEmpty()
             .Length(1, 64)
-            .WithMessage("максимальная длина имени дерева 64 символа");
+            .WithMessage(MsgValidation.ErrorMaxLength64);
 
         RuleFor(x => x.nodeName)
            .NotEmpty()
            .Length(1, 64)
-           .WithMessage("максимальная длина имени узла дерева 64 символа");
+           .WithMessage(MsgValidation.ErrorMaxLength64);
     }
 }

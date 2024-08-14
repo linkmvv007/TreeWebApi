@@ -1,4 +1,4 @@
-﻿namespace BusinessLayer.Commands.Journal;
+﻿namespace BusinessLayer.RequestContext.Journal;
 
 public record GetSingleContext
 {

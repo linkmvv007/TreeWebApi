@@ -1,5 +1,5 @@
-﻿using BusinessLayer.Commands.Journal;
-using BusinessLayer.Json;
+﻿using BusinessLayer.Json;
+using BusinessLayer.RequestContext.Journal;
 using DataLayer.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BusinessLayer.Commands;
+namespace BusinessLayer.RequestContext;
 
 public record CreateNodeContext
 {
