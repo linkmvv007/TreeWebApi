@@ -7,10 +7,11 @@ public class DeleteNodeContextValidator : AbstractValidator<DeleteNodeContext>
 {
     public DeleteNodeContextValidator()
     {
-        RuleFor(x => x.nodeId).NotNull();
+        RuleFor(x => x.nodeId)
+            .NotEmpty();
 
         RuleFor(x => x.treeName)
-           .NotNull()
+           .NotEmpty()
            .Length(1, 64)
            .WithMessage("максимальная длина имени дерева 64 символа");
     }

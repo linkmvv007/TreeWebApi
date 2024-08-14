@@ -7,15 +7,16 @@ public class RenameNodeContextValidator : AbstractValidator<RenameNodeContext>
 {
     public RenameNodeContextValidator()
     {
-        RuleFor(x => x.nodeId).NotNull();
+        RuleFor(x => x.nodeId)
+            .NotEmpty();
 
         RuleFor(x => x.treeName)
-           .NotNull()
+           .NotEmpty()
            .Length(1, 64)
            .WithMessage("максимальная длина имени дерева 64 символа");
 
         RuleFor(x => x.newNodeName)
-           .NotNull()
+           .NotEmpty()
            .Length(1, 64)
            .WithMessage("максимальная длина имени узла дерева 64 символа");
         //.When(x =>

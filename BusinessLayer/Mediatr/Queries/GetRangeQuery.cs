@@ -52,6 +52,8 @@ public class GetRangeQueryHandler : IRequestHandler<GetRangeQuery, JournalsJson?
             query = query.Where(e => e.CreatedAt <= toDate);
         }
 
+        query = query.OrderByDescending(x => x.CreatedAt);
+
         if (request.context.skip > 0)
         {
             query = query.Skip(request.context.skip);

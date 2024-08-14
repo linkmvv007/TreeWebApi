@@ -3,6 +3,7 @@ using BusinessLayer.Exceptions.Responces;
 using DataLayer.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Net;
 
@@ -28,11 +29,16 @@ public class AppMiddlewareException
         {
             await _next(context);
         }
-
         catch (SecureException ex)
         {
             await HandleExceptionAsync(context, dbContext, ex, ExceptionTypes.Secure, ex.EventId, HttpStatusCode.InternalServerError);
         }
+
+        catch (DbUpdateException ex)
+        {
+            await HandleExceptionAsync(context, dbContext, ex, ExceptionTypes.Exception, EventIds.DatabaseError, HttpStatusCode.InternalServerError);
+        }
+
         catch (Exception ex)
         {
             await HandleExceptionAsync(context, dbContext, ex, ExceptionTypes.Exception, EventIds.NetworkError, HttpStatusCode.InternalServerError);
