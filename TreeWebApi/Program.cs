@@ -1,3 +1,4 @@
+using BusinessLayer;
 using BusinessLayer.Middleware;
 using Microsoft.EntityFrameworkCore;
 using TreeWebApi.Extensions;
@@ -29,6 +30,15 @@ var app = builder.Build();
 // handle for exceptions
 app.UseMiddleware<AppMiddlewareException>();
 
+// add migrations:
+using (var scope = app.Services.CreateScope())
+{
+    var logContext = scope.ServiceProvider.GetRequiredService<LogContext>();
+    logContext.Database.Migrate();
+
+    var treeContext = scope.ServiceProvider.GetRequiredService<TreeContext>();
+    treeContext.Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
