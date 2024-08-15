@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace DataLayer.Models;
 
+[Index("CreatedAt", IsUnique = false)]
 public record ExceptionLog
 {
     [Key]
@@ -15,6 +16,5 @@ public record ExceptionLog
 
     public string? StackTrace { get; set; }
 
-   // [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public DateTime CreatedAt { get; set; } // auto generation date time 
 }

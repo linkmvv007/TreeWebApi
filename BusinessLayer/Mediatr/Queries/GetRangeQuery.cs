@@ -33,7 +33,8 @@ public class GetRangeQueryHandler : IRequestHandler<GetRangeQuery, JournalsJson?
 
             if (!string.IsNullOrEmpty(searchStr))
             {
-                query = query.Where(e => e.StackTrace != null && e.StackTrace.Contains(searchStr, StringComparison.OrdinalIgnoreCase));
+                query = query.Where(e => e.StackTrace != null
+                && EF.Functions.ILike(e.StackTrace, $"%{searchStr}%"));
             }
 
             var dates = request.context.filter.GetValidFromToDate();
