@@ -27,15 +27,15 @@ public class GetRangeQueryHandler : IRequestHandler<GetRangeQuery, JournalsJson?
     {
         IQueryable<ExceptionLog> query = _dbContext.ExceptionLogs.AsNoTracking();
 
-        var searchStr = request.context.filter?.search;
-
-        if (!string.IsNullOrEmpty(searchStr))
-        {
-            query = query.Where(e => e.StackTrace != null && e.StackTrace.Contains(searchStr));
-        }
-
         if (request.context.filter is not null)
         {
+            var searchStr = request.context.filter.search;
+
+            if (!string.IsNullOrEmpty(searchStr))
+            {
+                query = query.Where(e => e.StackTrace != null && e.StackTrace.Contains(searchStr, StringComparison.OrdinalIgnoreCase));
+            }
+
             var dates = request.context.filter.GetValidFromToDate();
 
             DateTime? fromDate = dates.from;
