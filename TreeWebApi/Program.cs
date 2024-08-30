@@ -2,6 +2,7 @@ using BusinessLayer;
 using BusinessLayer.Middleware;
 using Microsoft.EntityFrameworkCore;
 using TreeWebApi.Extensions;
+using TreeWebApi.Options;
 using static TreeWebApi.Extensions.ServiceCollectionExtension;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,11 +19,10 @@ builder.Services
     .AddMediator()                              // MediatR
     .AddFluentValidationDependencies();         // FluentValidation                                 
 
-var connectionString = builder.Configuration.GetConnectionString("Database");
+builder.Services.ConfigureOptions<DatabaseOptionsSetup>();
+
 builder.Services
-    .AddPostgresDb(connectionString);
-
-
+    .AddPostgresDb();
 
 var app = builder.Build();
 
