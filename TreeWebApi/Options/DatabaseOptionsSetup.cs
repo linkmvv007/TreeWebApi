@@ -15,9 +15,7 @@ public class DatabaseOptionsSetup : IConfigureOptions<DatabaseOptions>
 
     public void Configure(DatabaseOptions options)
     {
-        var connectionString = _configuration.GetConnectionString("Database");
-
-        options.ConnectionString = connectionString;
+        options.ConnectionString = _configuration.GetConnectionString("Database");
 
         _configuration.GetSection(DatabaseOptionName).Bind(options);
     }
